@@ -3,16 +3,21 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class Grid : MonoBehaviour {
+    public class Grid : MonoBehaviour
+    {
+        public bool DisplayGridGizmos;
         public LayerMask UnwalkableMask;
         public Vector2 GridWorldSize;
         public float NodeRadius;
-        public List<Node> Path;
 
-        Node[,] grid;
+        public int MaxSize
+        {
+            get { return gridSizeX * gridSizeY; }
+        }
 
-        float nodeDiameter;
-        int gridSizeX, gridSizeY;
+        private Node[,] grid;
+        private float nodeDiameter;
+        private int gridSizeX, gridSizeY;
 
         private void Awake()
         {
@@ -76,19 +81,14 @@ namespace Assets.Scripts
         {
             Gizmos.DrawWireCube(transform.position, new Vector3(GridWorldSize.x,1, GridWorldSize.y));
 
-            if(grid != null){
-                foreach(Node n in grid) {
-                    Gizmos.color = (n.walkable) ? Color.white: Color.red;
-                    if (Path != null)
-                    {
-                        if (Path.Contains(n))
-                        {
-                            Gizmos.color = Color.black;
-                        }
-                    }
+            if (grid != null && DisplayGridGizmos)
+            {
+                foreach (Node n in grid)
+                {
+                    Gizmos.color = (n.walkable) ? Color.white : Color.red;
                     Gizmos.DrawCube(n.WorldPosition, Vector3.one * (nodeDiameter - 0.1f));
                 }
-            }
+            } 
         }
     }
 }
